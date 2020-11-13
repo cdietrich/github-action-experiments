@@ -21,10 +21,12 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
+      - id: get_version
+        uses: battila7/get-version-action@v2
       - name: Release on Tag
         env:
-          TRAVIS_TAG: ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+          TRAVIS_TAG: "${{ steps.get_version.outputs.version }}"
         run: |
           echo "${{github.ref}} ${{env.TRAVIS_TAG}}"
           echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
-          echo "${{ github.event.release.tag_name }}"
+          echo "${{ steps.get_version.outputs.version }}"
